@@ -1,0 +1,12 @@
+# KiCad local/session files
+*.kicad_prl
+fp-info-cache
+*-backups/
+
+# Generated validation reports
+erc.rpt
+drc.rpt
+
+# OS/editor noise
+.DS_Store
+*.swp
