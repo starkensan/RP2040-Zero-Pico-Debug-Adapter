@@ -1,3 +1,3 @@
 (fp_lib_table
-  (lib (name "Adapter")(type "KiCad")(uri "${KIPRJMOD}/Adapter.pretty")(options "")(descr "Local footprints for RP2040-Zero debug adapter"))
+  (lib (name "Internet_Footprints")(type "KiCad")(uri "${KIPRJMOD}/Internet_Footprints.pretty")(options "")(descr "Footprints downloaded from online KiCad/SnapEDA sources"))
 )

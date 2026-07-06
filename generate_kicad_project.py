@@ -22,7 +22,11 @@ def vec(x, y):
 
 
 def load_fp(lib, name, ref, value, x, y, rot=0):
-    fp = pcbnew.FootprintLoad(f"/usr/share/kicad/footprints/{lib}.pretty", name)
+    if lib == "Internet_Footprints":
+        lib_path = OUT / "Internet_Footprints.pretty"
+    else:
+        lib_path = Path(f"/usr/share/kicad/footprints/{lib}.pretty")
+    fp = pcbnew.FootprintLoad(str(lib_path), name)
     if fp is None:
         raise RuntimeError(f"Unable to load footprint {lib}:{name}")
     fp.SetReference(ref)
@@ -126,7 +130,7 @@ def main():
     # RP2040-Zero module headers. Pin naming follows the Waveshare side pinout;
     # only the requested debug-probe pins are electrically used.
     j1 = load_fp(
-        "Connector_PinHeader_2.54mm",
+        "Internet_Footprints",
         "PinHeader_1x15_P2.54mm_Vertical",
         "J1",
         "RP2040-Zero left header",
@@ -134,7 +138,7 @@ def main():
         4.2,
     )
     j2 = load_fp(
-        "Connector_PinHeader_2.54mm",
+        "Internet_Footprints",
         "PinHeader_1x15_P2.54mm_Vertical",
         "J2",
         "RP2040-Zero right header",
@@ -160,7 +164,7 @@ def main():
     fps = {"J1": j1, "J2": j2}
     for ref, value, x, y, n1, n2 in resistors:
         r = load_fp(
-            "Resistor_THT",
+            "Internet_Footprints",
             "R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal",
             ref,
             value,
@@ -173,7 +177,7 @@ def main():
         fps[ref] = r
 
     swd = load_fp(
-        "Connector_JST",
+        "Internet_Footprints",
         "JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal",
         "J3",
         "Pico SWD JST-SH",
@@ -181,7 +185,7 @@ def main():
         38,
     )
     uart = load_fp(
-        "Connector_JST",
+        "Internet_Footprints",
         "JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal",
         "J4",
         "UART JST-SH",
@@ -189,7 +193,7 @@ def main():
         24,
     )
     reset = load_fp(
-        "Connector_PinHeader_2.54mm",
+        "Internet_Footprints",
         "PinHeader_1x02_P2.54mm_Vertical",
         "J5",
         "RUN/RESET optional",
@@ -209,10 +213,10 @@ def main():
     fps.update({"J3": swd, "J4": uart, "J5": reset})
 
     for ref, x, y in (("H1", 4, 4), ("H2", 45, 4), ("H3", 4, 46), ("H4", 54, 46)):
-        h = load_fp("MountingHole", "MountingHole_2.2mm_M2", ref, "M2", x, y)
+        h = load_fp("Internet_Footprints", "MountingHole_2.2mm_M2", ref, "M2", x, y)
         board.Add(h)
 
-    tp = load_fp("TestPoint", "TestPoint_THTPad_D1.5mm_Drill0.7mm", "TP1", "RUN", 48, 8)
+    tp = load_fp("Internet_Footprints", "TestPoint_THTPad_D1.5mm_Drill0.7mm", "TP1", "RUN", 48, 8)
     board.Add(tp)
     set_pad_net(tp, 1, nets["RUN_RESET"])
     fps["TP1"] = tp

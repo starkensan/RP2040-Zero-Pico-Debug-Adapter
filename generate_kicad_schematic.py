@@ -79,7 +79,7 @@ def resistor_symbol():
         "Adapter:R_Series",
         "R",
         "47R",
-        "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal",
+        "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal",
         pins,
         (-1.27, -2.54, 1.27, 2.54),
     )
@@ -95,7 +95,7 @@ def connector3_symbol():
         "Adapter:Conn_01x03",
         "J",
         "Conn_01x03",
-        "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal",
+        "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal",
         pins,
         (-1.27, -3.81, 1.27, 3.81),
     )
@@ -107,7 +107,7 @@ def connector2_symbol():
         "Adapter:Conn_01x02",
         "J",
         "Conn_01x02",
-        "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+        "Internet_Footprints:PinHeader_1x02_P2.54mm_Vertical",
         pins,
         (-1.27, -2.54, 1.27, 2.54),
     )
@@ -118,7 +118,7 @@ def testpoint_symbol():
         "Adapter:TestPoint",
         "TP",
         "TestPoint",
-        "TestPoint:TestPoint_THTPad_D1.5mm_Drill0.7mm",
+        "Internet_Footprints:TestPoint_THTPad_D1.5mm_Drill0.7mm",
         pin("1", "1", -5.08, 0, 0),
         (-1.27, -1.27, 1.27, 1.27),
     )
@@ -135,7 +135,7 @@ def module_left_symbol():
         "Adapter:RP2040_Zero_Left_DebugPins",
         "J",
         "RP2040-Zero left header",
-        "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical",
+        "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical",
         pins,
         (-8.89, -11.43, 6.35, 19.05),
     )
@@ -150,7 +150,7 @@ def module_right_symbol():
         "Adapter:RP2040_Zero_Right_DebugPins",
         "J",
         "RP2040-Zero right header",
-        "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical",
+        "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical",
         pins,
         (-8.89, -6.35, 6.35, 6.35),
     )
@@ -265,7 +265,7 @@ def main():
             "RP2040-Zero left header",
             30.48,
             55.88,
-            "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical",
+            "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical",
         )
     )
     parts.append(
@@ -275,7 +275,7 @@ def main():
             "RP2040-Zero right header",
             30.48,
             96.52,
-            "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical",
+            "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical",
         )
     )
     for ref, x, y in [
@@ -285,11 +285,11 @@ def main():
         ("R3", 81.28, 93.98),
         ("R4", 81.28, 99.06),
     ]:
-        parts.append(schematic_symbol("Adapter:R_Series", ref, "47R", x, y, "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"))
-    parts.append(schematic_symbol("Adapter:Conn_01x03", "J3", "Pico SWD JST-SH", 139.7, 50.8, "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"))
-    parts.append(schematic_symbol("Adapter:Conn_01x03", "J4", "UART JST-SH", 139.7, 96.52, "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"))
-    parts.append(schematic_symbol("Adapter:Conn_01x02", "J5", "RUN/RESET optional", 139.7, 121.92, "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"))
-    parts.append(schematic_symbol("Adapter:TestPoint", "TP1", "RUN", 111.76, 127, "TestPoint:TestPoint_THTPad_D1.5mm_Drill0.7mm"))
+        parts.append(schematic_symbol("Adapter:R_Series", ref, "47R", x, y, "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"))
+    parts.append(schematic_symbol("Adapter:Conn_01x03", "J3", "Pico SWD JST-SH", 139.7, 50.8, "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"))
+    parts.append(schematic_symbol("Adapter:Conn_01x03", "J4", "UART JST-SH", 139.7, 96.52, "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"))
+    parts.append(schematic_symbol("Adapter:Conn_01x02", "J5", "RUN/RESET optional", 139.7, 121.92, "Internet_Footprints:PinHeader_1x02_P2.54mm_Vertical"))
+    parts.append(schematic_symbol("Adapter:TestPoint", "TP1", "RUN", 111.76, 127, "Internet_Footprints:TestPoint_THTPad_D1.5mm_Drill0.7mm"))
 
     wires = []
     # J1 GP10/GP11/GP12 to series resistors.

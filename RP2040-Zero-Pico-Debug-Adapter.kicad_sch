@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "15635b09-bc36-4bb0-ac15-cf71280f0a26")
+	(uuid "d2da4a54-fb77-4394-952b-466507d5d3c3")
 	(paper "A4")
 	(title_block
 		(title "RP2040-Zero-Pico-Debug-Adapter")
@@ -38,7 +38,7 @@
 			)
 		)
 
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
+		(property "Footprint" "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
 			(at 0 0 0)
 			(effects
 				(font
@@ -146,7 +146,7 @@
 			)
 		)
 
-		(property "Footprint" "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"
 			(at 0 0 0)
 			(effects
 				(font
@@ -272,7 +272,7 @@
 			)
 		)
 
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+		(property "Footprint" "Internet_Footprints:PinHeader_1x02_P2.54mm_Vertical"
 			(at 0 0 0)
 			(effects
 				(font
@@ -380,7 +380,7 @@
 			)
 		)
 
-		(property "Footprint" "TestPoint:TestPoint_THTPad_D1.5mm_Drill0.7mm"
+		(property "Footprint" "Internet_Footprints:TestPoint_THTPad_D1.5mm_Drill0.7mm"
 			(at 0 0 0)
 			(effects
 				(font
@@ -470,7 +470,7 @@
 			)
 		)
 
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical"
+		(property "Footprint" "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical"
 			(at 0 0 0)
 			(effects
 				(font
@@ -614,7 +614,7 @@
 			)
 		)
 
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical"
+		(property "Footprint" "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical"
 			(at 0 0 0)
 			(effects
 				(font
@@ -705,7 +705,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "e7d1d8ad-2c17-486a-93ec-596e35b276cd")
+		(uuid "223d495f-9c48-4328-ae43-8622ac287124")
 
 		(property "Reference" "J1"
 			(at 30.48 48.260000000000005 0)
@@ -723,7 +723,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical"
+		(property "Footprint" "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical"
 			(at 30.48 55.88 0)
 			(effects
 				(font
@@ -767,7 +767,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "12127d61-622c-4831-8905-b0e2959b7c86")
+		(uuid "860fa1ad-95f3-43a6-93e5-0bc3ae4df54b")
 
 		(property "Reference" "J2"
 			(at 30.48 88.89999999999999 0)
@@ -785,7 +785,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x15_P2.54mm_Vertical"
+		(property "Footprint" "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical"
 			(at 30.48 96.52 0)
 			(effects
 				(font
@@ -829,7 +829,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c9c733ca-368d-4274-8501-7ea3026dc030")
+		(uuid "d05969fe-8b7e-43ee-97e5-534b554e13d5")
 
 		(property "Reference" "R1"
 			(at 81.28 40.64 0)
@@ -847,7 +847,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
+		(property "Footprint" "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
 			(at 81.28 48.26 0)
 			(effects
 				(font
@@ -891,7 +891,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "55fdaea8-39fc-41bd-8538-34bf78e291e2")
+		(uuid "ddc37c04-f35c-446e-9c48-cf7c24191b1a")
 
 		(property "Reference" "R2"
 			(at 81.28 48.260000000000005 0)
@@ -909,7 +909,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
+		(property "Footprint" "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
 			(at 81.28 55.88 0)
 			(effects
 				(font
@@ -953,7 +953,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "65311451-f7ac-457c-ae16-bc248f63ad15")
+		(uuid "0a88eb7b-a57d-443a-a106-49593e39a7db")
 
 		(property "Reference" "R5"
 			(at 81.28 55.88 0)
@@ -971,7 +971,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
+		(property "Footprint" "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
 			(at 81.28 63.5 0)
 			(effects
 				(font
@@ -1015,7 +1015,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c4d86f37-62a5-4211-bdba-d588fc655ff1")
+		(uuid "7405b676-d886-47fb-97c7-219f2c15389d")
 
 		(property "Reference" "R3"
 			(at 81.28 86.36 0)
@@ -1033,7 +1033,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
+		(property "Footprint" "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
 			(at 81.28 93.98 0)
 			(effects
 				(font
@@ -1077,7 +1077,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "e6b1c53b-925c-453e-bac3-51167b94cf84")
+		(uuid "cfa4f45c-8aa4-47d5-a8d0-1fc8d77102ab")
 
 		(property "Reference" "R4"
 			(at 81.28 91.44 0)
@@ -1095,7 +1095,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
+		(property "Footprint" "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
 			(at 81.28 99.06 0)
 			(effects
 				(font
@@ -1139,7 +1139,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "35885884-5c34-43ae-b1b9-c3c4d49245a5")
+		(uuid "683e5741-a6c6-4653-8d6f-1740e514e5d2")
 
 		(property "Reference" "J3"
 			(at 139.7 43.18 0)
@@ -1157,7 +1157,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"
 			(at 139.7 50.8 0)
 			(effects
 				(font
@@ -1201,7 +1201,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "767505b4-2c2a-48d4-b9f3-22c8987eb5f3")
+		(uuid "20064707-3eec-4205-a698-fd384d80bfa4")
 
 		(property "Reference" "J4"
 			(at 139.7 88.89999999999999 0)
@@ -1219,7 +1219,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"
 			(at 139.7 96.52 0)
 			(effects
 				(font
@@ -1263,7 +1263,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "3a4aa97f-5c21-4f75-96fd-25830c363dde")
+		(uuid "c27bc67b-edb8-4820-a8ee-3e3e524ce700")
 
 		(property "Reference" "J5"
 			(at 139.7 114.3 0)
@@ -1281,7 +1281,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
+		(property "Footprint" "Internet_Footprints:PinHeader_1x02_P2.54mm_Vertical"
 			(at 139.7 121.92 0)
 			(effects
 				(font
@@ -1325,7 +1325,7 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "9455919c-adfb-4956-b9aa-fa54f34b1052")
+		(uuid "f1bf218a-8bd8-4d5c-9a3b-cc49d56899eb")
 
 		(property "Reference" "TP1"
 			(at 111.76 119.38 0)
@@ -1343,7 +1343,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TestPoint:TestPoint_THTPad_D1.5mm_Drill0.7mm"
+		(property "Footprint" "Internet_Footprints:TestPoint_THTPad_D1.5mm_Drill0.7mm"
 			(at 111.76 127 0)
 			(effects
 				(font
@@ -1388,7 +1388,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f4df94be-6fcc-46a4-8045-df8ea240286a")
+		(uuid "95cc2378-11d0-43ff-bc77-79308b4a5da0")
 	)
 	(wire
 		(pts
@@ -1398,7 +1398,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8dfb51ee-764d-4742-976d-a02d2a3623c7")
+		(uuid "a17aa72d-a8ac-496d-ab5c-18b9e3b9acaf")
 	)
 	(wire
 		(pts
@@ -1408,7 +1408,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e6a7df6d-08ac-4d24-95fd-4bd05ad6c986")
+		(uuid "a1ee805b-2619-423f-9cb7-f13ed27819f4")
 	)
 	(wire
 		(pts
@@ -1418,7 +1418,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f3297b1d-6e9b-4cda-92d2-ee7e787370d0")
+		(uuid "503bc452-35f6-4f81-bd98-d54839bf083e")
 	)
 	(wire
 		(pts
@@ -1428,7 +1428,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f5b24de7-afbf-4477-99cb-f7c486d55f21")
+		(uuid "9b6ef3a7-b51a-4445-a239-d226c49175d4")
 	)
 	(wire
 		(pts
@@ -1438,7 +1438,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6407e176-f29f-4254-a7a5-583fe8574c30")
+		(uuid "8848e778-572d-4568-83c5-f35713189a54")
 	)
 	(wire
 		(pts
@@ -1448,7 +1448,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9cf78b56-ca84-44b2-8f43-7019069e0405")
+		(uuid "3715176f-ce67-4b4f-ad21-bc969bcde35a")
 	)
 	(wire
 		(pts
@@ -1458,7 +1458,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "31989a43-c341-456e-9e25-636681a7c0f5")
+		(uuid "48580e58-8839-48fe-961d-73f324dd06bc")
 	)
 	(wire
 		(pts
@@ -1468,7 +1468,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "86eb1f8c-4ac9-4aeb-ae0c-15377b771e2b")
+		(uuid "49e73b33-d616-47c9-beac-353f2f8ecce6")
 	)
 	(wire
 		(pts
@@ -1478,7 +1478,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "34513597-e75f-4e2a-8a74-942187556447")
+		(uuid "0e7e85a0-837d-4695-afba-63617a6b53df")
 	)
 	(wire
 		(pts
@@ -1488,7 +1488,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e6e0fb35-4203-4dad-8761-f5da81c22b03")
+		(uuid "9a4cc3db-1f05-42cc-9ba1-3821514bc633")
 	)
 	(wire
 		(pts
@@ -1498,7 +1498,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e9080018-c4aa-45b7-b822-a737ab47b160")
+		(uuid "8669a026-6319-4ed0-a4f9-aeff0e43bc31")
 	)
 	(wire
 		(pts
@@ -1508,7 +1508,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "bd579cd0-8ef5-403d-8426-2b287e38ca49")
+		(uuid "d3770d90-f59d-48bd-ba48-ce39299b3ff9")
 	)
 	(wire
 		(pts
@@ -1518,7 +1518,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "46eb0c21-660c-43b1-985f-98da8256eedd")
+		(uuid "482c7f0d-714a-42e0-abbd-5fd63024dd4d")
 	)
 	(wire
 		(pts
@@ -1528,7 +1528,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "c931a2bb-8ba7-4d3a-8f7a-9a6aaa7ee11e")
+		(uuid "2f5a378b-dd51-4061-b94b-2c4a1c08854e")
 	)
 	(wire
 		(pts
@@ -1538,7 +1538,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b42142e4-c6b3-44d2-8ddb-fc96d45fce86")
+		(uuid "e148e914-f9db-44b2-9323-32ec144ff86f")
 	)
 	(wire
 		(pts
@@ -1548,7 +1548,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "cf5f4dfe-c4c8-449b-92ce-566ef92d80f1")
+		(uuid "7740edf4-32ef-4ff1-ae0d-b6bbef2fa6f1")
 	)
 	(wire
 		(pts
@@ -1558,7 +1558,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "fe786330-6888-4213-8219-3adfd08f3214")
+		(uuid "59661c28-0747-4829-b6f5-da0a5fbb9e30")
 	)
 	(wire
 		(pts
@@ -1568,7 +1568,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "49862122-0033-4e10-870a-41920a294179")
+		(uuid "e8590a0a-dd54-4112-90de-ef6effee38cc")
 	)
 	(wire
 		(pts
@@ -1578,7 +1578,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "fa5aebcc-11eb-411f-a08e-f78e6a001dc9")
+		(uuid "4556ce79-f114-4a53-a9f0-d3eab04cf7df")
 	)
 
 	(label "GP10_SWCLK"
@@ -1589,7 +1589,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "08b89b5f-42f7-41b2-9030-4ceaa126bab5")
+		(uuid "55e50cb3-fe42-489c-b40a-21b4377b431a")
 	)
 	(label "SWCLK"
 		(at 111.76 48.26 0)
@@ -1599,7 +1599,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "c49080a7-d3ea-434f-817b-3f6c410d7dd2")
+		(uuid "5b009f82-fba4-47d5-a867-ab4e6ae2565a")
 	)
 	(label "GP11_SWDIO"
 		(at 52.07 55.88 0)
@@ -1609,7 +1609,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "e2f859da-5b53-4798-8812-5103cae6df30")
+		(uuid "a0835b92-6d15-4101-8440-16c8eb6f0a2e")
 	)
 	(label "SWDIO"
 		(at 111.76 53.34 0)
@@ -1619,7 +1619,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a1f6abf4-3baf-403c-84d2-c959870e9f08")
+		(uuid "e22f93b4-762a-4c5a-a032-31856b6ce64d")
 	)
 	(label "GP12_RESET"
 		(at 52.07 63.5 0)
@@ -1629,7 +1629,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "58323605-8764-4c93-b852-5c2ee3abad9b")
+		(uuid "f4f3c181-a92c-4589-96fe-5d4f2368f6de")
 	)
 	(label "RUN_RESET"
 		(at 106.68 120.65 0)
@@ -1639,7 +1639,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "9dd7b0e1-6548-470e-8b9e-c874df391d80")
+		(uuid "f87def08-00ae-4c9f-a1db-abcfb005155f")
 	)
 	(label "GP4_UART_TX"
 		(at 52.07 93.98 0)
@@ -1649,7 +1649,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "d31114d9-796e-444a-b92a-05163fac4714")
+		(uuid "899f9c87-402f-4364-81af-10bf7f795053")
 	)
 	(label "UART_TX"
 		(at 111.76 93.98 0)
@@ -1659,7 +1659,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "36b66b39-578f-448b-a0ce-7a24ab9885fc")
+		(uuid "86caf526-ea5f-4fcd-98fd-389a84b085b8")
 	)
 	(label "GP5_UART_RX"
 		(at 52.07 99.06 0)
@@ -1669,7 +1669,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "fdda52ff-7c41-4dfe-b255-a5cfe11e47c2")
+		(uuid "7fc2ed2a-58f0-4ff7-b993-a890c7954215")
 	)
 	(label "UART_RX"
 		(at 111.76 99.06 0)
@@ -1679,7 +1679,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "09444ca9-02b8-4625-bdb6-aaa8d84ef686")
+		(uuid "26c08c17-4d2d-4013-bc60-c23e6f7a93cd")
 	)
 	(label "GND"
 		(at 48.26 71.12 0)
@@ -1689,7 +1689,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "bd369a6c-2acf-4a7d-b10f-277fb0ac565a")
+		(uuid "5668127b-8999-4a1a-90c4-214a41c96bb7")
 	)
 	(label "GND"
 		(at 127 50.8 0)
@@ -1699,7 +1699,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "ce40e543-e3d0-46d8-b194-1588d474dae4")
+		(uuid "c76fbf82-0d62-42b8-a5ed-29eb3a7e9de5")
 	)
 	(label "GND"
 		(at 127 96.52 0)
@@ -1709,7 +1709,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "59801ea2-76ab-41c9-9a6d-9f21d033d625")
+		(uuid "edafc937-f5ff-4825-9c64-cc92e277feb2")
 	)
 	(label "GND"
 		(at 127 123.19 0)
@@ -1719,7 +1719,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a2dfda10-0d3b-49ef-a86c-5524b38f6fc7")
+		(uuid "2d8f81ca-2d23-44dd-9590-7abb9f8607fd")
 	)
 
 	(text "J3 Pico SWD pinout: 1 SWCLK, 2 GND, 3 SWDIO"
@@ -1731,7 +1731,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "ff6da863-a53b-4049-bdfa-91022dec6680")
+		(uuid "8b855982-f690-4d83-a9e6-60d548958096")
 	)
 	(text "J4 UART pinout: 1 TX from probe, 2 GND, 3 RX to probe"
 		(exclude_from_sim no)
@@ -1742,7 +1742,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "7d71b870-d151-41a4-a178-7d7d4ca85f5d")
+		(uuid "700b432f-b317-4530-897f-88d7158d7bf7")
 	)
 	(text "Do not connect RP2040-Zero 3V3 to the target by default."
 		(exclude_from_sim no)
@@ -1753,7 +1753,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "c55146c0-8231-4768-b100-173d78188af7")
+		(uuid "8c970901-3f6c-41e5-ac81-33fdd3ee9e0e")
 	)
 	(text "RP2040-Zero runs debugprobe-zero firmware."
 		(exclude_from_sim no)
@@ -1764,7 +1764,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "4dd4803f-5eee-41c0-9fd0-a72ae1ebe7de")
+		(uuid "29e1c4b3-b437-418f-aa44-d97dcffadb48")
 	)
 	(sheet_instances
 		(path "/"
