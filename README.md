@@ -45,5 +45,9 @@ The RP2040-Zero 3V3 pin is not routed to the target connectors by default.
 - `RP2040-Zero-Pico-Debug-Adapter.kicad_pro`: KiCad project.
 - `RP2040-Zero-Pico-Debug-Adapter.kicad_sch`: schematic note/net-map sheet.
 - `RP2040-Zero-Pico-Debug-Adapter.kicad_pcb`: placed and routed PCB layout.
+- `RP2040-Zero-Pico-Debug-Adapter.net`: KiCad netlist exported from the schematic.
 - `RP2040-Zero-Pico-Debug-Adapter_bom.csv`: bill of materials.
 - `generate_kicad_project.py`: reproducible PCB generator using KiCad 9 `pcbnew`.
+- `generate_kicad_schematic.py`: reproducible schematic/local symbol generator.
+- `Adapter.pretty/`: project-local footprints sourced from official online references.
+- `FOOTPRINT_SOURCES.md`: footprint source notes and URLs.
