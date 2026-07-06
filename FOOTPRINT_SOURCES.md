@@ -6,6 +6,7 @@
   - https://www.snapeda.com/parts/RP2040-ZERO/Waveshare%20Electronics/view-part/
   - The page advertises CAD Models for Symbol, Footprint, and 3D Model, and lists KiCad as an available format.
   - Direct automated download from SnapEDA was blocked by Cloudflare/API 403 in this environment, so the SnapEDA model was not copied into the repository.
+  - `SnapEDA/README.md` documents how to add the downloaded KiCad model if retrieved manually in a browser.
 - Waveshare RP2040-Zero wiki: official product page with pinout and dimensions sections.
   - https://www.waveshare.com/wiki/RP2040-Zero
 - Waveshare RP2040-Zero official schematic PDF.

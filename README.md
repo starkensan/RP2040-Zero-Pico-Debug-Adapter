@@ -50,4 +50,5 @@ The RP2040-Zero 3V3 pin is not routed to the target connectors by default.
 - `generate_kicad_project.py`: reproducible PCB generator using KiCad 9 `pcbnew`.
 - `generate_kicad_schematic.py`: reproducible schematic/local symbol generator.
 - `Internet_Footprints.pretty/`: footprints downloaded from online KiCad library references.
+- `SnapEDA/README.md`: source URL and manual import notes for the SnapEDA RP2040-ZERO model.
 - `FOOTPRINT_SOURCES.md`: footprint source notes and URLs.
