@@ -6,13 +6,13 @@ KiCad 9 project for a small 2-layer adapter PCB that mounts a Waveshare RP2040-Z
 
 | RP2040-Zero signal | Adapter part | Target connector pin |
 | --- | --- | --- |
-| GP10 | R1 47 ohm series | J3 pin 1 SWCLK |
+| GP10 | R1 100 ohm series | J3 pin 1 SWCLK |
 | GND | direct | J3 pin 2 GND |
-| GP11 | R2 47 ohm series | J3 pin 3 SWDIO |
-| GP4 | R3 47 ohm series | J4 pin 1 TX from probe |
+| GP11 | R2 100 ohm series | J3 pin 3 SWDIO |
+| GP4 | R3 100 ohm series | J4 pin 1 TX from probe |
 | GND | direct | J4 pin 2 GND |
-| GP5 | R4 47 ohm series | J4 pin 3 RX to probe |
-| GP12 | R5 47 ohm series | J5 pin 1 RUN/RESET and TP1 |
+| GP5 | R4 100 ohm series | J4 pin 3 RX to probe |
+| GP12 | direct | J5 pin 1 RUN/RESET and TP1 |
 | GND | direct | J5 pin 2 GND |
 
 The RP2040-Zero 3V3 pin is not routed to the target connectors by default.
@@ -33,12 +33,15 @@ The RP2040-Zero 3V3 pin is not routed to the target connectors by default.
 
 ## Build Notes
 
-- Board size: 58 mm x 50 mm.
+- Board size: 48 mm x 30 mm.
 - Copper layers: 2.
+- GND copper pours: filled zones on both F.Cu and B.Cu.
 - Signal tracks: 0.35 mm nominal.
 - Ground routes: 0.6 mm nominal on the back layer.
-- Series resistors are through-hole 7.62 mm axial footprints and can be populated as 47 ohm resistors or shorted with wire jumpers.
-- The RP2040-Zero module area is marked on silkscreen. Verify the module pinout and USB-C orientation before soldering headers.
+- SWD and UART use 100 ohm source-termination resistors in 0603 (1608 metric) packages. RUN/RESET is connected directly.
+- The SWD and UART JST-SH connectors are aligned along the lower board edge with their cable openings facing outward/downward when the RP2040-Zero USB-C connector is at the top.
+- RP2040-Zero is represented as one 23-pin `U1` symbol and the project-local `Adapter:Waveshare_RP2040-Zero` footprint.
+- The footprint supports castellated SMD mounting and optional 0.8 mm through holes. Verify the USB-C orientation before soldering.
 
 ## Files
 
@@ -49,6 +52,7 @@ The RP2040-Zero 3V3 pin is not routed to the target connectors by default.
 - `RP2040-Zero-Pico-Debug-Adapter_bom.csv`: bill of materials.
 - `generate_kicad_project.py`: reproducible PCB generator using KiCad 9 `pcbnew`.
 - `generate_kicad_schematic.py`: reproducible schematic/local symbol generator.
-- `Internet_Footprints.pretty/`: footprints downloaded from online KiCad library references.
-- `SnapEDA/README.md`: source URL and manual import notes for the SnapEDA RP2040-ZERO model.
+- `RP2040-Zero.kicad_sym`: downloaded RP2040-Zero symbol library.
+- `Adapter.pretty/`: project-local footprints, including the downloaded and verified RP2040-Zero footprint.
+- `3dmodels/Waveshare_RP2040-Zero.step`: official Waveshare 3D model used by the RP2040-Zero footprint.
 - `FOOTPRINT_SOURCES.md`: footprint source notes and URLs.

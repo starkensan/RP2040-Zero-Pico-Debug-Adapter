@@ -6,6 +6,8 @@ builds the placed/routed board from KiCad 9 stock footprints.
 """
 
 from pathlib import Path
+import subprocess
+import sys
 import pcbnew
 
 
@@ -22,13 +24,20 @@ def vec(x, y):
 
 
 def load_fp(lib, name, ref, value, x, y, rot=0):
-    if lib == "Internet_Footprints":
-        lib_path = OUT / "Internet_Footprints.pretty"
-    else:
-        lib_path = Path(f"/usr/share/kicad/footprints/{lib}.pretty")
-    fp = pcbnew.FootprintLoad(str(lib_path), name)
+    fp = pcbnew.FootprintLoad(f"/usr/share/kicad/footprints/{lib}.pretty", name)
     if fp is None:
         raise RuntimeError(f"Unable to load footprint {lib}:{name}")
+    fp.SetReference(ref)
+    fp.SetValue(value)
+    fp.SetPosition(vec(x, y))
+    fp.SetOrientationDegrees(rot)
+    return fp
+
+
+def load_local_fp(name, ref, value, x, y, rot=0):
+    fp = pcbnew.FootprintLoad(str(OUT / "Adapter.pretty"), name)
+    if fp is None:
+        raise RuntimeError(f"Unable to load local footprint Adapter:{name}")
     fp.SetReference(ref)
     fp.SetValue(value)
     fp.SetPosition(vec(x, y))
@@ -50,7 +59,16 @@ def pad(fp, number):
 
 
 def set_pad_net(fp, number, net):
-    pad(fp, number).SetNet(net)
+    matches = [p for p in fp.Pads() if p.GetNumber() == str(number)]
+    if not matches:
+        raise RuntimeError(f"{fp.GetReference()} has no pad {number}")
+    for item in matches:
+        item.SetNet(net)
+
+
+def pad_xy(fp, number):
+    position = pad(fp, number).GetPosition()
+    return (pcbnew.ToMM(position.x), pcbnew.ToMM(position.y))
 
 
 def add_track(board, start, end, net, width=0.35, layer=pcbnew.F_Cu):
@@ -106,6 +124,26 @@ def add_text(board, text, x, y, size=1.2, layer=pcbnew.F_SilkS, rot=0, thickness
     board.Add(txt)
 
 
+def add_zone(board, net, layer, points, clearance=0.25, min_thickness=0.25):
+    zone = pcbnew.ZONE(board)
+    zone.SetNet(net)
+    zone.SetLayer(layer)
+    zone.SetLocalClearance(mm(clearance))
+    zone.SetMinThickness(mm(min_thickness))
+    outline = zone.Outline()
+    outline.NewOutline()
+    for point in points:
+        outline.Append(vec(*point))
+    board.Add(zone)
+    return zone
+
+
+def fill_zones(board_path):
+    board = pcbnew.LoadBoard(str(board_path))
+    pcbnew.ZONE_FILLER(board).Fill(board.Zones())
+    pcbnew.SaveBoard(str(board_path), board)
+
+
 def main():
     board = pcbnew.BOARD()
     board.SetBoardUse(0)
@@ -120,52 +158,33 @@ def main():
         "UART_TX": add_net(board, "UART_TX"),
         "GP5_UART_RX": add_net(board, "GP5_UART_RX"),
         "UART_RX": add_net(board, "UART_RX"),
-        "GP12_RESET": add_net(board, "GP12_RESET"),
         "RUN_RESET": add_net(board, "RUN_RESET"),
     }
 
-    # 58 mm x 50 mm compact rectangle with clearance for four M2 holes.
-    add_rect(board, 0, 0, 58, 50, pcbnew.Edge_Cuts, 0.1)
+    # 48 mm x 30 mm compact layout: module left, target I/O along the bottom.
+    add_rect(board, 0, 0, 48, 30, pcbnew.Edge_Cuts, 0.1)
 
-    # RP2040-Zero module headers. Pin naming follows the Waveshare side pinout;
-    # only the requested debug-probe pins are electrically used.
-    j1 = load_fp(
-        "Internet_Footprints",
-        "PinHeader_1x15_P2.54mm_Vertical",
-        "J1",
-        "RP2040-Zero left header",
-        13,
-        4.2,
-    )
-    j2 = load_fp(
-        "Internet_Footprints",
-        "PinHeader_1x15_P2.54mm_Vertical",
-        "J2",
-        "RP2040-Zero right header",
-        30,
-        4.2,
-    )
-    board.Add(j1)
-    board.Add(j2)
-    set_pad_net(j1, 2, nets["GND"])
-    set_pad_net(j1, 11, nets["GP12_RESET"])
-    set_pad_net(j1, 12, nets["GP11_SWDIO"])
-    set_pad_net(j1, 13, nets["GP10_SWCLK"])
-    set_pad_net(j2, 5, nets["GP4_UART_TX"])
-    set_pad_net(j2, 6, nets["GP5_UART_RX"])
+    # Downloaded 23-pin RP2040-Zero footprint, USB-C end toward board top.
+    u1 = load_local_fp("Waveshare_RP2040-Zero", "U1", "RP2040-Zero", 3.5, 27.187)
+    board.Add(u1)
+    set_pad_net(u1, 2, nets["GND"])
+    set_pad_net(u1, 14, nets["GP4_UART_TX"])
+    set_pad_net(u1, 15, nets["GP5_UART_RX"])
+    set_pad_net(u1, 20, nets["RUN_RESET"])
+    set_pad_net(u1, 21, nets["GP11_SWDIO"])
+    set_pad_net(u1, 22, nets["GP10_SWCLK"])
 
     resistors = [
-        ("R1", "47R", 39.0, 35.0, "GP10_SWCLK", "SWCLK"),
-        ("R2", "47R", 39.0, 38.0, "GP11_SWDIO", "SWDIO"),
-        ("R3", "47R", 39.0, 21.0, "GP4_UART_TX", "UART_TX"),
-        ("R4", "47R", 39.0, 24.0, "GP5_UART_RX", "UART_RX"),
-        ("R5", "47R", 39.0, 30.0, "GP12_RESET", "RUN_RESET"),
+        ("R1", "100R", 30.0, 18.0, "GP10_SWCLK", "SWCLK"),
+        ("R2", "100R", 34.0, 20.5, "GP11_SWDIO", "SWDIO"),
+        ("R3", "100R", 39.0, 14.0, "GP4_UART_TX", "UART_TX"),
+        ("R4", "100R", 42.0, 18.0, "GP5_UART_RX", "UART_RX"),
     ]
-    fps = {"J1": j1, "J2": j2}
+    fps = {"U1": u1}
     for ref, value, x, y, n1, n2 in resistors:
         r = load_fp(
-            "Internet_Footprints",
-            "R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal",
+            "Resistor_SMD",
+            "R_0603_1608Metric",
             ref,
             value,
             x,
@@ -177,31 +196,32 @@ def main():
         fps[ref] = r
 
     swd = load_fp(
-        "Internet_Footprints",
+        "Connector_JST",
         "JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal",
         "J3",
         "Pico SWD JST-SH",
-        54,
-        38,
+        34,
+        26.5,
     )
     uart = load_fp(
-        "Internet_Footprints",
+        "Connector_JST",
         "JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal",
         "J4",
         "UART JST-SH",
-        54,
-        24,
+        43.5,
+        26.5,
     )
     reset = load_fp(
-        "Internet_Footprints",
+        "Connector_PinHeader_2.54mm",
         "PinHeader_1x02_P2.54mm_Vertical",
         "J5",
         "RUN/RESET optional",
-        54,
-        8,
+        35,
+        3,
     )
     for fp in (swd, uart, reset):
         board.Add(fp)
+    reset.Reference().SetPosition(vec(39.0, 7.0))
     set_pad_net(swd, 1, nets["SWCLK"])
     set_pad_net(swd, 2, nets["GND"])
     set_pad_net(swd, 3, nets["SWDIO"])
@@ -212,60 +232,78 @@ def main():
     set_pad_net(reset, 2, nets["GND"])
     fps.update({"J3": swd, "J4": uart, "J5": reset})
 
-    for ref, x, y in (("H1", 4, 4), ("H2", 45, 4), ("H3", 4, 46), ("H4", 54, 46)):
-        h = load_fp("Internet_Footprints", "MountingHole_2.2mm_M2", ref, "M2", x, y)
-        board.Add(h)
-
-    tp = load_fp("Internet_Footprints", "TestPoint_THTPad_D1.5mm_Drill0.7mm", "TP1", "RUN", 48, 8)
+    tp = load_fp("TestPoint", "TestPoint_THTPad_D1.5mm_Drill0.7mm", "TP1", "RUN", 29, 3)
     board.Add(tp)
     set_pad_net(tp, 1, nets["RUN_RESET"])
     fps["TP1"] = tp
 
-    # Routing: 0.35 mm signal tracks, 0.6 mm ground.
-    route(board, [(13, 34.68), (20.0, 34.68), (20.0, 33.41), (37.0, 33.41), (37.0, 35.0), (39.0, 35.0)], nets["GP10_SWCLK"])
-    route(board, [(46.62, 35.0), (53.0, 35.0), (53.0, 36.0)], nets["SWCLK"])
-    route(board, [(13, 32.14), (22.0, 32.14), (22.0, 30.87), (35.8, 30.87), (35.8, 38.0), (39.0, 38.0)], nets["GP11_SWDIO"], layer=pcbnew.B_Cu)
-    route(board, [(46.62, 38.0), (55.0, 38.0), (55.0, 36.0)], nets["SWDIO"])
-    route(board, [(30, 14.36), (34.0, 14.36), (34.0, 21.0), (39.0, 21.0)], nets["GP4_UART_TX"])
-    route(board, [(46.62, 21.0), (53.0, 21.0), (53.0, 22.0)], nets["UART_TX"])
-    route(board, [(30, 16.9), (35.5, 16.9), (35.5, 24.0), (39.0, 24.0)], nets["GP5_UART_RX"], layer=pcbnew.B_Cu)
-    route(board, [(46.62, 24.0), (55.0, 24.0), (55.0, 22.0)], nets["UART_RX"])
-    route(board, [(13, 29.6), (23.0, 29.6), (23.0, 28.33), (37.0, 28.33), (37.0, 30.0), (39.0, 30.0)], nets["GP12_RESET"])
-    route(board, [(46.62, 30.0), (50.0, 30.0), (50.0, 8.0), (54.0, 8.0)], nets["RUN_RESET"], layer=pcbnew.B_Cu)
-    route(board, [(50.0, 8.0), (48.0, 8.0)], nets["RUN_RESET"], layer=pcbnew.B_Cu)
+    # Routing: exact footprint pad positions, 0.35 mm signals, 0.6 mm ground.
+    r1_in, r1_out = pad_xy(fps["R1"], 1), pad_xy(fps["R1"], 2)
+    r2_in, r2_out = pad_xy(fps["R2"], 1), pad_xy(fps["R2"], 2)
+    r3_in, r3_out = pad_xy(fps["R3"], 1), pad_xy(fps["R3"], 2)
+    r4_in, r4_out = pad_xy(fps["R4"], 1), pad_xy(fps["R4"], 2)
+    swd1, swd2, swd3 = (pad_xy(swd, number) for number in (1, 2, 3))
+    uart1, uart2, uart3 = (pad_xy(uart, number) for number in (1, 2, 3))
+
+    route(board, [(16.2, 24.52), (16.2, 27.5), (23.5, 27.5)], nets["GP10_SWCLK"])
+    add_via(board, 23.5, 27.5, nets["GP10_SWCLK"])
+    route(board, [(23.5, 27.5), (27.0, 27.5)], nets["GP10_SWCLK"], layer=pcbnew.B_Cu)
+    add_via(board, 27.0, 27.5, nets["GP10_SWCLK"])
+    route(board, [(27.0, 27.5), (27.0, r1_in[1]), r1_in], nets["GP10_SWCLK"])
+    route(board, [r1_out, (32.0, r1_out[1]), (32.0, 23.0), swd1], nets["SWCLK"])
+    route(board, [(13.66, 24.52), (13.66, 26.0), (33.175, 26.0), (33.175, 19.3)], nets["GP11_SWDIO"], layer=pcbnew.B_Cu)
+    add_via(board, 33.175, 19.3, nets["GP11_SWDIO"])
+    route(board, [(33.175, 19.3), r2_in], nets["GP11_SWDIO"])
+    route(board, [r2_out, swd3], nets["SWDIO"])
+    route(board, [(21.28, 14.36), (23.0, 14.36)], nets["GP4_UART_TX"])
+    add_via(board, 23.0, 14.36, nets["GP4_UART_TX"])
+    route(board, [(23.0, 14.36), (27.0, 14.36)], nets["GP4_UART_TX"], layer=pcbnew.B_Cu)
+    add_via(board, 27.0, 14.36, nets["GP4_UART_TX"])
+    route(board, [(27.0, 14.36), (27.0, r3_in[1]), r3_in], nets["GP4_UART_TX"])
+    route(board, [r3_out, (40.2, r3_out[1]), (40.2, 22.5), uart1], nets["UART_TX"])
+    route(board, [(21.28, 16.9), (41.175, 16.9), (41.175, 19.3)], nets["GP5_UART_RX"], layer=pcbnew.B_Cu)
+    add_via(board, 41.175, 19.3, nets["GP5_UART_RX"])
+    route(board, [(41.175, 19.3), r4_in], nets["GP5_UART_RX"])
+    route(board, [r4_out, (44.5, r4_out[1]), uart3], nets["UART_RX"])
+    route(board, [(11.12, 24.52), (11.12, 29.0), (25.0, 29.0)], nets["RUN_RESET"], layer=pcbnew.B_Cu)
+    add_via(board, 25.0, 29.0, nets["RUN_RESET"])
+    route(board, [(25.0, 29.0), (25.0, 3.0), pad_xy(reset, 1)], nets["RUN_RESET"])
+    route(board, [(25.0, 3.0), pad_xy(tp, 1)], nets["RUN_RESET"])
 
     g = nets["GND"]
-    add_via(board, 54.0, 34.5, g)
-    add_via(board, 54.0, 20.5, g)
-    route(board, [(13, 6.74), (7.0, 6.74), (7.0, 48.0), (56.0, 48.0), (56.0, 34.5), (54.0, 34.5)], g, 0.6, pcbnew.B_Cu)
-    route(board, [(56.0, 34.5), (56.0, 20.5), (54.0, 20.5)], g, 0.6, pcbnew.B_Cu)
-    route(board, [(56.0, 20.5), (56.0, 10.54), (54.0, 10.54)], g, 0.6, pcbnew.B_Cu)
-    route(board, [(54.0, 34.5), (54.0, 36.0)], g, 0.25, pcbnew.F_Cu)
-    route(board, [(54.0, 20.5), (54.0, 22.0)], g, 0.25, pcbnew.F_Cu)
+    add_via(board, uart2[0], 22.0, g)
+    add_via(board, swd2[0], 22.0, g)
+    route(board, [(6.04, 6.74), (1.0, 6.74), (1.0, 1.0), (47.0, 1.0), (47.0, 22.0)], g, 0.6, pcbnew.B_Cu)
+    route(board, [(47.0, pad_xy(reset, 2)[1]), pad_xy(reset, 2)], g, 0.6, pcbnew.B_Cu)
+    route(board, [(47.0, 22.0), (swd2[0], 22.0)], g, 0.6, pcbnew.B_Cu)
+    route(board, [(uart2[0], 22.0), uart2], g, 0.3, pcbnew.F_Cu)
+    route(board, [(swd2[0], 22.0), swd2], g, 0.3, pcbnew.F_Cu)
 
-    # Silkscreen module keepout/placement guide and connector labels.
-    add_rect(board, 9.0, 1.9, 34.0, 42.0, pcbnew.F_SilkS, 0.15)
-    add_text(board, "Waveshare RP2040-Zero", 10.2, 2.8, 1.0)
-    add_text(board, "USB-C end", 10.2, 5.0, 0.9)
-    add_text(board, "PICO SWD", 47.0, 31.7, 1.25)
-    add_text(board, "1 SWCLK  2 GND  3 SWDIO", 38.5, 33.2, 0.75)
-    add_text(board, "UART", 49.6, 17.8, 1.25)
-    add_text(board, "1 TX  2 GND  3 RX", 42.0, 19.4, 0.75)
-    add_text(board, "RUN", 49.4, 5.8, 1.0)
-    add_text(board, "NO 3V3 TO TARGET", 14.5, 41.0, 1.0)
-    add_text(board, "GP10", 14.4, 35.0, 0.8)
-    add_text(board, "GP11", 14.4, 32.5, 0.8)
-    add_text(board, "GP12", 14.4, 30.0, 0.8)
-    add_text(board, "GP4", 31.4, 14.6, 0.8)
-    add_text(board, "GP5", 31.4, 17.1, 0.8)
-    add_text(board, PROJECT, 4.0, 49.0, 0.85)
+    # Connector labels. U1 provides its own module outline and orientation.
+    add_text(board, "USB-C", 13.5, 3.5, 0.8)
+    add_text(board, "SWD", 34.0, 16.5, 0.8)
+    add_text(board, "UART", 43.5, 12.0, 0.8)
+    add_text(board, "3V3 ISOLATED", 10.0, 28.0, 0.8)
 
     # Small pin-1 marks by the target JST connectors.
-    add_text(board, "1", 50.0, 35.4, 0.8)
-    add_text(board, "1", 50.0, 21.4, 0.8)
+    add_text(board, "1", 31.6, 23.0, 0.8)
+    add_text(board, "1", 41.1, 23.0, 0.8)
 
-    pcbnew.SaveBoard(str(OUT / f"{PROJECT}.kicad_pcb"), board)
+    # GND pours on both copper layers, inset from the routed board edge.
+    zone_outline = [(0.3, 0.3), (47.7, 0.3), (47.7, 29.7), (0.3, 29.7)]
+    add_zone(board, g, pcbnew.F_Cu, zone_outline)
+    add_zone(board, g, pcbnew.B_Cu, zone_outline)
+
+    board_path = OUT / f"{PROJECT}.kicad_pcb"
+    pcbnew.SaveBoard(str(board_path), board)
+    subprocess.run(
+        [sys.executable, str(Path(__file__).resolve()), "--fill-zones", str(board_path)],
+        check=True,
+    )
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) == 3 and sys.argv[1] == "--fill-zones":
+        fill_zones(Path(sys.argv[2]))
+    else:
+        main()

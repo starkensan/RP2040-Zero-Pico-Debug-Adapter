@@ -2,32 +2,42 @@
 
 ## Sources Checked
 
-- SnapMagic/SnapEDA RP2040-ZERO page provided by the user.
-  - https://www.snapeda.com/parts/RP2040-ZERO/Waveshare%20Electronics/view-part/
-  - The page advertises CAD Models for Symbol, Footprint, and 3D Model, and lists KiCad as an available format.
-  - Direct automated download from SnapEDA was blocked by Cloudflare/API 403 in this environment, so the SnapEDA model was not copied into the repository.
-  - `SnapEDA/README.md` documents how to add the downloaded KiCad model if retrieved manually in a browser.
 - Waveshare RP2040-Zero wiki: official product page with pinout and dimensions sections.
   - https://www.waveshare.com/wiki/RP2040-Zero
 - Waveshare RP2040-Zero official schematic PDF.
   - https://files.waveshare.com/upload/4/4c/RP2040_Zero.pdf
+- Waveshare RP2040-Zero official STEP model.
+  - https://files.waveshare.com/upload/f/f7/RP2040_Zero_stp.zip
+  - Stored as `3dmodels/Waveshare_RP2040-Zero.step` and referenced directly by the local footprint.
+- dj505 RP2040-Zero KiCad symbol and footprint library, downloaded at commit `b22a0c1afb350dda50ebb7cf2d9c5f3dd3e419ce`.
+  - https://github.com/dj505/RP2040-Zero-KiCAD
+  - License: CERN Open Hardware Licence Version 2 - Permissive; local copy in `LICENSES/RP2040-Zero-KiCAD-CERN-OHL-P-2.0.txt`.
 - KiCad official footprint library entry for the JST-SH connector used by this project.
   - https://gitlab.com/kicad/libraries/kicad-footprints/-/blob/master/Connector_JST.pretty/JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal.kicad_mod
 
-## Downloaded Online Footprints
+## Local Footprints
 
-These footprints were downloaded from the KiCad official online footprint repository and registered through `fp-lib-table` as `Internet_Footprints`:
+- `Adapter.pretty/Waveshare_RP2040-Zero.kicad_mod`
+  - Downloaded from dj505's public KiCad library and checked against Waveshare's official 18.00 mm x 23.50 mm dimensions and 23-pin pinout.
+  - Supports the castellated SMD pads and optional 0.8 mm through holes.
+  - The source footprint's internal `Edge.Cuts` cutout was removed because this carrier board does not require a module-area cutout.
+  - Applied to `U1`; used nets are `GP10` (pin 22), `GP11` (21), `GP12` (20), `GP4` (14), `GP5` (15), and `GND` (2).
 
-- `Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal`
-- `Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal`
-- `Internet_Footprints:PinHeader_1x02_P2.54mm_Vertical`
-- `Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical`
-- `Internet_Footprints:TestPoint_THTPad_D1.5mm_Drill0.7mm`
-- `Internet_Footprints:MountingHole_2.2mm_M2`
+## Local Symbol
 
-The RP2040-Zero module is mounted using two downloaded KiCad 1x15 through-hole pin-header footprints in the PCB layout, matching the original board requirement for through-hole headers.
+- `RP2040-Zero.kicad_sym`
+  - Downloaded from the same dj505 library.
+  - Default footprint and official Waveshare datasheet fields were added locally; the module GND pin was changed from `power_in` to `passive` to match this unpowered adapter's ERC semantics.
+  - Registered as `RP2040_Zero:RP2040-Zero` and applied to `U1`.
 
-The downloaded KiCad `master` footprint files were normalized for KiCad 9.0 compatibility by removing newer footprint attributes that KiCad 9's `pcbnew.FootprintLoad` cannot parse and changing the 3D model environment variable from `${KICAD10_3DMODEL_DIR}` to `${KICAD9_3DMODEL_DIR}`. Geometry, pads, and footprint names remain from the downloaded online KiCad footprint files.
+## Stock KiCad Footprints Used
+
+The remaining footprints are stock KiCad 9 footprints, with the JST-SH connector cross-checked against the KiCad official online footprint library:
+
+- `Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal`
+- `Resistor_SMD:R_0603_1608Metric`
+- `Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical`
+- `TestPoint:TestPoint_THTPad_D1.5mm_Drill0.7mm`
 
 ## Netlist
 
@@ -38,5 +48,3 @@ kicad-cli sch export netlist --format kicadsexpr \
   --output RP2040-Zero-Pico-Debug-Adapter.net \
   RP2040-Zero-Pico-Debug-Adapter.kicad_sch
 ```
-
-No matching public netlist for this exact adapter project was found online. Netlists are design-specific, so the repository keeps the KiCad-exported netlist generated from the project schematic.

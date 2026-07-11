@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / f"{PROJECT}.kicad_sch"
 SYMLIB = ROOT / "Adapter.kicad_sym"
 SYMTABLE = ROOT / "sym-lib-table"
+RP2040_ZERO_SYMLIB = ROOT / "RP2040-Zero.kicad_sym"
 
 
 def u():
@@ -78,10 +79,10 @@ def resistor_symbol():
     return lib_symbol(
         "Adapter:R_Series",
         "R",
-        "47R",
-        "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal",
+        "100R",
+        "Resistor_SMD:R_0603_1608Metric",
         pins,
-        (-1.27, -2.54, 1.27, 2.54),
+        (-2.54, -1.27, 2.54, 1.27),
     )
 
 
@@ -95,7 +96,7 @@ def connector3_symbol():
         "Adapter:Conn_01x03",
         "J",
         "Conn_01x03",
-        "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal",
+        "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal",
         pins,
         (-1.27, -3.81, 1.27, 3.81),
     )
@@ -107,7 +108,7 @@ def connector2_symbol():
         "Adapter:Conn_01x02",
         "J",
         "Conn_01x02",
-        "Internet_Footprints:PinHeader_1x02_P2.54mm_Vertical",
+        "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
         pins,
         (-1.27, -2.54, 1.27, 2.54),
     )
@@ -118,49 +119,36 @@ def testpoint_symbol():
         "Adapter:TestPoint",
         "TP",
         "TestPoint",
-        "Internet_Footprints:TestPoint_THTPad_D1.5mm_Drill0.7mm",
+        "TestPoint:TestPoint_THTPad_D1.5mm_Drill0.7mm",
         pin("1", "1", -5.08, 0, 0),
         (-1.27, -1.27, 1.27, 1.27),
     )
 
 
-def module_left_symbol():
-    pins = (
-        pin("13", "GP10 / SWCLK", 10.16, 7.62, 180, ptype="bidirectional")
-        + pin("12", "GP11 / SWDIO", 10.16, 0, 180, ptype="bidirectional")
-        + pin("11", "GP12 / RUN", 10.16, -7.62, 180, ptype="bidirectional")
-        + pin("2", "GND", 10.16, -15.24, 180)
-    )
-    return lib_symbol(
-        "Adapter:RP2040_Zero_Left_DebugPins",
-        "J",
-        "RP2040-Zero left header",
-        "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical",
-        pins,
-        (-8.89, -11.43, 6.35, 19.05),
-    )
-
-
-def module_right_symbol():
-    pins = (
-        pin("5", "GP4 / UART TX", 10.16, 2.54, 180, ptype="output")
-        + pin("6", "GP5 / UART RX", 10.16, -2.54, 180, ptype="input")
-    )
-    return lib_symbol(
-        "Adapter:RP2040_Zero_Right_DebugPins",
-        "J",
-        "RP2040-Zero right header",
-        "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical",
-        pins,
-        (-8.89, -6.35, 6.35, 6.35),
-    )
-
-
+def rp2040_zero_symbol():
+    """Embed the downloaded library symbol under its project library ID."""
+    text = RP2040_ZERO_SYMLIB.read_text()
+    start = text.index('(symbol "RP2040-Zero"')
+    depth = 0
+    for index in range(start, len(text)):
+        if text[index] == "(":
+            depth += 1
+        elif text[index] == ")":
+            depth -= 1
+            if depth == 0:
+                return text[start : index + 1].replace(
+                    '(symbol "RP2040-Zero"',
+                    '(symbol "RP2040_Zero:RP2040-Zero"',
+                    1,
+                )
+    raise ValueError("Invalid RP2040-Zero symbol library")
 def schematic_symbol(lib_id, ref, value, x, y, footprint, fields=None):
     fields = fields or {}
+    ref_dy = fields.get("ref_dy", 7.62)
+    value_dy = fields.get("value_dy", 7.62)
     props = (
-        prop("Reference", ref, x, y - 7.62)
-        + prop("Value", value, x, y + 7.62)
+        prop("Reference", ref, x, y - ref_dy)
+        + prop("Value", value, x, y + value_dy)
         + prop("Footprint", footprint, x, y, hide=True)
         + prop("Datasheet", "~", x, y, hide=True)
         + prop("Description", fields.get("Description", value), x, y, hide=True)
@@ -201,7 +189,15 @@ def wire(x1, y1, x2, y2):
 \t)'''
 
 
-def label(text, x, y, rot=0):
+def no_connect(x, y):
+    return f'''
+	(no_connect
+		(at {x} {y})
+		(uuid "{u()}")
+	)'''
+
+
+def label(text, x, y, rot=0, justify="left bottom"):
     return f'''
 \t(label "{text}"
 \t\t(at {x} {y} {rot})
@@ -209,7 +205,7 @@ def label(text, x, y, rot=0):
 \t\t\t(font
 \t\t\t\t(size 1.27 1.27)
 \t\t\t)
-\t\t\t(justify left bottom)
+\t\t\t(justify {justify})
 \t\t)
 \t\t(uuid "{u()}")
 \t)'''
@@ -237,10 +233,9 @@ def main():
             connector3_symbol(),
             connector2_symbol(),
             testpoint_symbol(),
-            module_left_symbol(),
-            module_right_symbol(),
         ]
     )
+    embedded_symbols = lib_symbols + "\n" + rp2040_zero_symbol()
     SYMLIB.write_text(
         f'''(kicad_symbol_lib
 \t(version 20241209)
@@ -253,6 +248,7 @@ def main():
     SYMTABLE.write_text(
         '''(sym_lib_table
   (lib (name "Adapter")(type "KiCad")(uri "${KIPRJMOD}/Adapter.kicad_sym")(options "")(descr "RP2040-Zero debug adapter local schematic symbols"))
+  (lib (name "RP2040_Zero")(type "KiCad")(uri "${KIPRJMOD}/RP2040-Zero.kicad_sym")(options "")(descr "Downloaded Waveshare RP2040-Zero symbol"))
 )
 '''
     )
@@ -260,70 +256,76 @@ def main():
     parts = []
     parts.append(
         schematic_symbol(
-            "Adapter:RP2040_Zero_Left_DebugPins",
-            "J1",
-            "RP2040-Zero left header",
-            30.48,
-            55.88,
-            "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical",
-        )
-    )
-    parts.append(
-        schematic_symbol(
-            "Adapter:RP2040_Zero_Right_DebugPins",
-            "J2",
-            "RP2040-Zero right header",
-            30.48,
-            96.52,
-            "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical",
+            "RP2040_Zero:RP2040-Zero",
+            "U1",
+            "RP2040-Zero",
+            45.72,
+            76.2,
+            "Adapter:Waveshare_RP2040-Zero",
+            {"Description": "Waveshare RP2040-Zero module"},
         )
     )
     for ref, x, y in [
-        ("R1", 81.28, 48.26),
-        ("R2", 81.28, 55.88),
-        ("R5", 81.28, 63.5),
-        ("R3", 81.28, 93.98),
-        ("R4", 81.28, 99.06),
+        ("R1", 91.44, 48.26),
+        ("R2", 91.44, 55.88),
+        ("R3", 91.44, 88.9),
+        ("R4", 91.44, 96.52),
     ]:
-        parts.append(schematic_symbol("Adapter:R_Series", ref, "47R", x, y, "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"))
-    parts.append(schematic_symbol("Adapter:Conn_01x03", "J3", "Pico SWD JST-SH", 139.7, 50.8, "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"))
-    parts.append(schematic_symbol("Adapter:Conn_01x03", "J4", "UART JST-SH", 139.7, 96.52, "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"))
-    parts.append(schematic_symbol("Adapter:Conn_01x02", "J5", "RUN/RESET optional", 139.7, 121.92, "Internet_Footprints:PinHeader_1x02_P2.54mm_Vertical"))
-    parts.append(schematic_symbol("Adapter:TestPoint", "TP1", "RUN", 111.76, 127, "Internet_Footprints:TestPoint_THTPad_D1.5mm_Drill0.7mm"))
+        parts.append(schematic_symbol(
+            "Adapter:R_Series", ref, "100R", x, y,
+            "Resistor_SMD:R_0603_1608Metric",
+            {"ref_dy": 2.54, "value_dy": 2.54},
+        ))
+    parts.append(schematic_symbol("Adapter:Conn_01x03", "J3", "Pico SWD JST-SH", 139.7, 52.07, "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"))
+    parts.append(schematic_symbol("Adapter:Conn_01x03", "J4", "UART JST-SH", 139.7, 92.71, "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"))
+    parts.append(schematic_symbol("Adapter:Conn_01x02", "J5", "RUN/RESET optional", 139.7, 116.84, "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"))
+    parts.append(schematic_symbol(
+        "Adapter:TestPoint", "TP1", "RUN", 111.76, 116.84,
+        "TestPoint:TestPoint_THTPad_D1.5mm_Drill0.7mm",
+        {"ref_dy": 2.54, "value_dy": 2.54},
+    ))
 
     wires = []
-    # J1 GP10/GP11/GP12 to series resistors.
-    wires += [wire(40.64, 48.26, 76.2, 48.26), wire(86.36, 48.26, 134.62, 48.26)]
-    wires += [wire(40.64, 55.88, 76.2, 55.88), wire(86.36, 55.88, 106.68, 55.88), wire(106.68, 55.88, 106.68, 53.34), wire(106.68, 53.34, 134.62, 53.34)]
-    wires += [wire(40.64, 63.5, 76.2, 63.5), wire(86.36, 63.5, 101.6, 63.5), wire(101.6, 63.5, 101.6, 120.65), wire(101.6, 120.65, 134.62, 120.65)]
-    wires += [wire(101.6, 127, 106.68, 127), wire(101.6, 120.65, 101.6, 127)]
-    # J2 UART through series resistors.
-    wires += [wire(40.64, 93.98, 76.2, 93.98), wire(86.36, 93.98, 134.62, 93.98)]
-    wires += [wire(40.64, 99.06, 76.2, 99.06), wire(86.36, 99.06, 134.62, 99.06)]
-    # GND labels/wires.
-    wires += [wire(40.64, 71.12, 48.26, 71.12), wire(134.62, 50.8, 127, 50.8), wire(134.62, 96.52, 127, 96.52), wire(134.62, 123.19, 127, 123.19)]
+    # Short local stubs keep functional blocks readable; labels carry nets.
+    wires += [wire(48.26, 100.33, 48.26, 105.41), wire(48.26, 105.41, 55.88, 105.41)]
+    wires += [wire(45.72, 100.33, 45.72, 107.95), wire(45.72, 107.95, 55.88, 107.95)]
+    wires += [wire(43.18, 100.33, 43.18, 110.49), wire(43.18, 110.49, 55.88, 110.49)]
+    wires += [wire(60.96, 81.28, 68.58, 81.28), wire(60.96, 83.82, 68.58, 83.82)]
+    wires += [wire(30.48, 73.66, 25.4, 73.66)]
+    for y in (48.26, 55.88, 88.9, 96.52):
+        wires += [wire(86.36, y, 78.74, y), wire(96.52, y, 104.14, y)]
+    wires += [wire(134.62, 49.53, 127, 49.53), wire(134.62, 52.07, 127, 52.07), wire(134.62, 54.61, 127, 54.61)]
+    wires += [wire(134.62, 90.17, 127, 90.17), wire(134.62, 92.71, 127, 92.71), wire(134.62, 95.25, 127, 95.25)]
+    wires += [wire(134.62, 115.57, 127, 115.57), wire(134.62, 118.11, 127, 118.11)]
+    wires += [wire(106.68, 116.84, 101.6, 116.84)]
 
     labels = [
-        label("GP10_SWCLK", 52.07, 48.26),
-        label("SWCLK", 111.76, 48.26),
-        label("GP11_SWDIO", 52.07, 55.88),
-        label("SWDIO", 111.76, 53.34),
-        label("GP12_RESET", 52.07, 63.5),
-        label("RUN_RESET", 106.68, 120.65),
-        label("GP4_UART_TX", 52.07, 93.98),
-        label("UART_TX", 111.76, 93.98),
-        label("GP5_UART_RX", 52.07, 99.06),
-        label("UART_RX", 111.76, 99.06),
-        label("GND", 48.26, 71.12),
-        label("GND", 127, 50.8),
-        label("GND", 127, 96.52),
-        label("GND", 127, 123.19),
+        label("GP10_SWCLK", 55.88, 105.41), label("GP11_SWDIO", 55.88, 107.95),
+        label("RUN_RESET", 55.88, 110.49), label("GP4_UART_TX", 68.58, 81.28),
+        label("GP5_UART_RX", 68.58, 83.82), label("GND", 25.4, 73.66, justify="right bottom"),
+        label("GP10_SWCLK", 78.74, 48.26, justify="right bottom"), label("SWCLK", 104.14, 48.26),
+        label("GP11_SWDIO", 78.74, 55.88, justify="right bottom"), label("SWDIO", 104.14, 55.88),
+        label("GP4_UART_TX", 78.74, 88.9, justify="right bottom"), label("UART_TX", 104.14, 88.9),
+        label("GP5_UART_RX", 78.74, 96.52, justify="right bottom"), label("UART_RX", 104.14, 96.52),
+        label("SWCLK", 127, 49.53, justify="right bottom"), label("GND", 127, 52.07, justify="right bottom"), label("SWDIO", 127, 54.61, justify="right bottom"),
+        label("UART_TX", 127, 90.17, justify="right bottom"), label("GND", 127, 92.71, justify="right bottom"), label("UART_RX", 127, 95.25, justify="right bottom"),
+        label("RUN_RESET", 127, 115.57, justify="right bottom"), label("GND", 127, 118.11, justify="right bottom"),
+        label("RUN_RESET", 101.6, 116.84, justify="right bottom"),
     ]
     notes = [
-        text_note("J3 Pico SWD pinout: 1 SWCLK, 2 GND, 3 SWDIO", 122, 38),
-        text_note("J4 UART pinout: 1 TX from probe, 2 GND, 3 RX to probe", 115, 83),
-        text_note("Do not connect RP2040-Zero 3V3 to the target by default.", 25, 135),
-        text_note("RP2040-Zero runs debugprobe-zero firmware.", 25, 141),
+        text_note("RP2040-ZERO DEBUG PROBE", 25, 35, 2.0),
+        text_note("SWD", 121, 39, 1.5),
+        text_note("UART", 121, 80, 1.5),
+        text_note("RUN / RESET", 121, 106, 1.5),
+        text_note("Target 3V3 is intentionally isolated.", 25, 124),
+    ]
+
+    unused_pins = [
+        (30.48, 71.12), (30.48, 76.2), (30.48, 78.74), (30.48, 81.28),
+        (30.48, 83.82), (30.48, 86.36), (30.48, 88.9), (30.48, 91.44),
+        (60.96, 71.12), (60.96, 73.66), (60.96, 76.2), (60.96, 78.74),
+        (60.96, 86.36), (60.96, 88.9), (60.96, 91.44),
+        (40.64, 100.33), (50.8, 100.33),
     ]
 
     content = f'''(kicad_sch
@@ -331,7 +333,7 @@ def main():
 \t(generator "eeschema")
 \t(generator_version "9.0")
 \t(uuid "{u()}")
-\t(paper "A4")
+\t(paper "A5")
 \t(title_block
 \t\t(title "{PROJECT}")
 \t\t(company "Generated by Codex")
@@ -339,12 +341,13 @@ def main():
 \t\t(comment 2 "Target 3V3 is intentionally not connected")
 \t)
 \t(lib_symbols
-{lib_symbols}
+{embedded_symbols}
 \t)
 {"".join(parts)}
 {"".join(wires)}
 {"".join(labels)}
 {"".join(notes)}
+{"".join(no_connect(x, y) for x, y in unused_pins)}
 \t(sheet_instances
 \t\t(path "/"
 \t\t\t(page "1")

@@ -12,7 +12,7 @@
 		(on_board yes)
 
 		(property "Reference" "R"
-			(at 0 -5.08 0)
+			(at 0 -3.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20,8 +20,8 @@
 			)
 		)
 
-		(property "Value" "47R"
-			(at 0 5.08 0)
+		(property "Value" "100R"
+			(at 0 3.81 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -29,7 +29,7 @@
 			)
 		)
 
-		(property "Footprint" "Internet_Footprints:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal"
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
 			(at 0 0 0)
 			(effects
 				(font
@@ -49,7 +49,7 @@
 			)
 		)
 
-		(property "Description" "47R"
+		(property "Description" "100R"
 			(at 0 0 0)
 			(effects
 				(font
@@ -60,8 +60,8 @@
 		)
 		(symbol "R_Series_1_1"
 			(rectangle
-				(start -1.27 -2.54)
-				(end 1.27 2.54)
+				(start -2.54 -1.27)
+				(end 2.54 1.27)
 				(stroke
 					(width 0.254)
 					(type default)
@@ -137,7 +137,7 @@
 			)
 		)
 
-		(property "Footprint" "Internet_Footprints:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"
+		(property "Footprint" "Connector_JST:JST_SH_SM03B-SRSS-TB_1x03-1MP_P1.00mm_Horizontal"
 			(at 0 0 0)
 			(effects
 				(font
@@ -263,7 +263,7 @@
 			)
 		)
 
-		(property "Footprint" "Internet_Footprints:PinHeader_1x02_P2.54mm_Vertical"
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 0 0 0)
 			(effects
 				(font
@@ -371,7 +371,7 @@
 			)
 		)
 
-		(property "Footprint" "Internet_Footprints:TestPoint_THTPad_D1.5mm_Drill0.7mm"
+		(property "Footprint" "TestPoint:TestPoint_THTPad_D1.5mm_Drill0.7mm"
 			(at 0 0 0)
 			(effects
 				(font
@@ -424,258 +424,6 @@
 			)
 				)
 				(number "1"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-			)
-		)
-		(embedded_fonts no)
-	)
-
-	(symbol "Adapter:RP2040_Zero_Left_DebugPins"
-		(pin_names
-			(offset 1.016)
-		)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-
-		(property "Reference" "J"
-			(at 0 -13.969999999999999 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-
-		(property "Value" "RP2040-Zero left header"
-			(at 0 21.59 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-
-		(property "Footprint" "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-
-		(property "Datasheet" "~"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-
-		(property "Description" "RP2040-Zero left header"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(symbol "RP2040_Zero_Left_DebugPins_1_1"
-			(rectangle
-				(start -8.89 -11.43)
-				(end 6.35 19.05)
-				(stroke
-					(width 0.254)
-					(type default)
-				)
-				(fill
-					(type background)
-				)
-			)
-
-			(pin bidirectional line
-				(at 10.16 7.62 180)
-				(length 3.81)
-				(name "GP10 / SWCLK"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-				(number "13"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-			)
-			(pin bidirectional line
-				(at 10.16 0 180)
-				(length 3.81)
-				(name "GP11 / SWDIO"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-				(number "12"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-			)
-			(pin bidirectional line
-				(at 10.16 -7.62 180)
-				(length 3.81)
-				(name "GP12 / RUN"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-				(number "11"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-			)
-			(pin passive line
-				(at 10.16 -15.24 180)
-				(length 3.81)
-				(name "GND"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-				(number "2"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-			)
-		)
-		(embedded_fonts no)
-	)
-
-	(symbol "Adapter:RP2040_Zero_Right_DebugPins"
-		(pin_names
-			(offset 1.016)
-		)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-
-		(property "Reference" "J"
-			(at 0 -8.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-
-		(property "Value" "RP2040-Zero right header"
-			(at 0 8.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-
-		(property "Footprint" "Internet_Footprints:PinHeader_1x15_P2.54mm_Vertical"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-
-		(property "Datasheet" "~"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-
-		(property "Description" "RP2040-Zero right header"
-			(at 0 0 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(symbol "RP2040_Zero_Right_DebugPins_1_1"
-			(rectangle
-				(start -8.89 -6.35)
-				(end 6.35 6.35)
-				(stroke
-					(width 0.254)
-					(type default)
-				)
-				(fill
-					(type background)
-				)
-			)
-
-			(pin output line
-				(at 10.16 2.54 180)
-				(length 3.81)
-				(name "GP4 / UART TX"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-				(number "5"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-			)
-			(pin input line
-				(at 10.16 -2.54 180)
-				(length 3.81)
-				(name "GP5 / UART RX"
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-				)
-				(number "6"
 			(effects
 				(font
 					(size 1.27 1.27)

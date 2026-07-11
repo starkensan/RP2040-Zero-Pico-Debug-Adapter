@@ -1,3 +1,4 @@
 (sym_lib_table
   (lib (name "Adapter")(type "KiCad")(uri "${KIPRJMOD}/Adapter.kicad_sym")(options "")(descr "RP2040-Zero debug adapter local schematic symbols"))
+  (lib (name "RP2040_Zero")(type "KiCad")(uri "${KIPRJMOD}/RP2040-Zero.kicad_sym")(options "")(descr "Downloaded Waveshare RP2040-Zero symbol"))
 )
