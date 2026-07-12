@@ -33,13 +33,13 @@ The RP2040-Zero 3V3 pin is not routed to the target connectors by default.
 
 ## Build Notes
 
-- Board size: 48 mm x 30 mm.
+- Board size: 30 mm x 40 mm, portrait orientation.
 - Copper layers: 2.
 - GND copper pours: filled zones on both F.Cu and B.Cu.
 - Signal tracks: 0.35 mm nominal.
 - Ground routes: 0.6 mm nominal on the back layer.
 - SWD and UART use 100 ohm source-termination resistors in 0603 (1608 metric) packages. RUN/RESET is connected directly.
-- The SWD and UART JST-SH connectors are aligned along the lower board edge with their cable openings facing outward/downward when the RP2040-Zero USB-C connector is at the top.
+- With the RP2040-Zero USB-C connector at the top, J5 is at the left-center, UART is at the lower-left, and SWD is at the lower-right. Both JST-SH cable openings face outward/downward.
 - RP2040-Zero is represented as one 23-pin `U1` symbol and the project-local `Adapter:Waveshare_RP2040-Zero` footprint.
 - The footprint supports castellated SMD mounting and optional 0.8 mm through holes. Verify the USB-C orientation before soldering.
 
